@@ -1,4 +1,3 @@
-// day_03_1.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,12 +28,23 @@ int main() {
 	int num1 = 0;
 	int num2 = 0;
 
+	bool is_enabled = true;
 
 	char *temp_string = NULL;
 
 	while (input[count] != '\0') {
+		if (strncmp(&input[count], "do(", 3) == 0) {
+			is_enabled = true;
+			count += 3;
+			while (input[count] != ')') count++;
+		}
+		else if (strncmp(&input[count], "don't(", 6) == 0) {
+			is_enabled = false;
+			count += 6;
+			while (input[count] != ')') count++;
+		}
 
-		if (input[count] == 'm' && input[count + 1] == 'u' && input[count + 2] == 'l' && input[count +3] == '(') {
+		if (input[count] == 'm' && input[count + 1] == 'u' && input[count + 2] == 'l' && input[count +3] == '(' && is_enabled) {
 			start = count + 4;
 			end = start;
 
