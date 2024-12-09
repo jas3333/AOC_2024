@@ -1,11 +1,8 @@
-# Problem:
+# Day 3:
 
 ---
 
-This is an Advent of Code problem. I have an input file that resembles the example
-below.
-
-# Part 1:
+## Part 1:
 
 ---
 
@@ -29,7 +26,7 @@ Only the four highlighted sections are real mul instructions. Adding up the resu
 Scan the corrupted memory for uncorrupted mul instructions. What do you get if you add up all of the results of the multiplications?
 ```
 
-# Part 2:
+## Part 2:
 
 ---
 
