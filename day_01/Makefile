@@ -1,5 +1,5 @@
 CC = gcc
-SOURCE = day_01.c 
+SOURCE = day_01_1.c 
 OUTPUT = -o day_01 
 
 run:
