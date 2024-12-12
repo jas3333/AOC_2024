@@ -118,3 +118,29 @@ void display_array(int *array, int size) {
 
 	}
 }
+
+bool safe_check(int *array, int count) {
+	bool is_decreasing = true;
+	bool is_increasing = true;
+
+	for (int i = 0; i < count - 1; i++) {
+		if (array[i] < array[i + 1]) {
+			is_decreasing = false;
+		} 
+		else if (array[i] > array[i + 1]){
+			is_increasing = false;
+		}
+		else {
+			return false;
+		}
+
+		int diff = abs(array[i] - array[i + 1]);
+		if (diff < 1 || diff > 3) {
+			return false;
+		}
+	}
+
+	if (is_decreasing || is_increasing) return true;
+
+	return false;
+}
