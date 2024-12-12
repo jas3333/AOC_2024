@@ -24,12 +24,17 @@ typedef struct {
 MAP init_map(int size);
 int get_value(MAP *map, char *key);
 int line_count(const char *filename); 
+int get_filesize(char *filename); 
+int get_line_length(char *filename); 
+
 uint32_t hash(char *key);
+
 void strip_newline(char *string); 
 void insert(MAP *map, char *key); 
 void cleanup(MAP *map); 
 void fill_map(MAP *map, char *input_file); 
 void display_array(int *array, int size);
+
 bool safe_check(int *array, int count);
 
 #endif

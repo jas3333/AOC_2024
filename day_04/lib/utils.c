@@ -144,3 +144,31 @@ bool safe_check(int *array, int count) {
 
 	return false;
 }
+
+int get_filesize(char *filename) {
+	FILE *file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("File not found.\n");
+		exit(1);
+	}
+
+	fseek(file, 0L, SEEK_END);
+	int filesize = ftell(file);
+	fclose(file);
+
+	return filesize;
+}
+
+int get_line_length(char *filename) {
+	FILE *file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("File not found.\n");
+		exit(1);
+	}
+
+	int count = 0;
+	char ch;
+	while ((ch = fgetc(file)) != '\n') count++; 
+
+	return count;
+}

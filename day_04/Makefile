@@ -1,6 +1,6 @@
 CC = gcc
-SOURCE = day_02_2.c
-OUTPUT = -o day_02
+SOURCE = day_04_1.c
+OUTPUT = -o day_04
 LIB = lib/utils.h lib/utils.c
 
 run:
