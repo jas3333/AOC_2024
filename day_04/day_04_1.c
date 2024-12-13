@@ -1,16 +1,6 @@
 #include <stdio.h>
 #include "lib/utils.h"
 
-int check_horizontal(char *string, int size) {
-	int total = 0;
-	for (int i = 0; i < size - 3; i++) {
-		if (string[i] == 'X' && string[i + 1] == 'M' && string[i + 2] == 'A' && string[i + 3] == 'S') {
-			total++;
-		}
-	}
-	return total;
-}
-
 int main(int argc, char *argv[]) {
 
 	if (argc < 2) {
