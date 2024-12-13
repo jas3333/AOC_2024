@@ -14,11 +14,13 @@ uint32_t hash(char *key) {
 
 void strip_newline(char *string) {
 	int count = 0;
-	while (string[count] != '\n') {
+	while (string[count] != '\0' && string[count] != '\n') {
 		count++;
 	}
 
-	string[count] = '\0';
+	if (string[count] == '\n') {
+		string[count] = '\0';
+	}
 }
 
 void insert(MAP *map, char *key) {
