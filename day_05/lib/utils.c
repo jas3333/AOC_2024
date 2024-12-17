@@ -246,3 +246,58 @@ void free_2d_array(char **array, int rows) {
 	}
 	free(array);
 }
+
+// Given an input file, will return the line number a blank line is found.
+int find_blank_line_number(char *filename) {
+	int count = 0;
+	FILE *file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("File: %s not found.\n", filename);
+		exit(1);
+	}
+
+	char buffer[128];
+	while (fgets(buffer, 128, file) != NULL) {
+		if (strcmp(buffer, "\n") == 0) {
+			return count;
+		}
+		count++;
+	}
+	fclose(file);
+	// Not found
+	return 0;
+}
+
+
+// Loads rules into provided 2D array from input file.
+void load_rules(char *filename, int array[][2], int array_size) {
+	FILE *file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("File: %s not found.\n", filename);
+		exit(1);
+	}
+
+	char buffer[128];
+	for (int i = 0; i < array_size; i++) {
+		int count = 0;
+		fgets(buffer, 128, file);
+		char *token;
+		token = strtok(buffer, "|");
+		while (token != NULL && count < 2) {
+			array[i][count] = atoi(token);
+			count++;
+		}
+	}
+	fclose(file);
+}
+// Fast forward file to stop point. Use when need to process part of a file. 
+void fast_forward(FILE *file, int stop, int buffer_size) {
+	char buffer[buffer_size];
+
+	for (int i = 0; i < stop + 1; i++) {
+		if (fgets(buffer, sizeof(buffer), file) == NULL) {
+			printf("Reached end of file.\n");
+			return;
+		}
+	}
+}

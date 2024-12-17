@@ -42,4 +42,8 @@ int word_check(char grid[][141], int row_start, int col_start, int cols, int row
 char **load_file_into_2d_array(char *filename); 
 void free_2d_array(char **array, int rows); 
 
+int find_blank_line_number(char *filename);
+void load_rules(char *filename, int array[][2], int array_size); 
+void fast_forward(FILE *file, int stop, int buffer_size); 
+
 #endif
