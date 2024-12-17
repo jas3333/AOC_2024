@@ -198,9 +198,53 @@ int word_check(char grid[][141], int row_start, int col_start, int rows, int col
 	return 1;
 }
 
+
+// Need help with this one...
 char **load_file_into_2d_array(char *filename) {
-	int rows = line_count(filename); 
-	int cols = 
+	int rows = file_row_count(filename); 
+	int cols = file_col_count(filename);
 
+	char **array = malloc(rows * sizeof(char *));
+	if (array == NULL) {
+		printf("Unable to allocate memory for rows\n");
+		exit(1);
+	}
 
+	FILE *file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("Unable to find %s.\n", filename);
+		exit(1);
+	}
+
+	for (int i = 0; i < rows; i++) {
+		array[i] = malloc((cols + 1) * sizeof(char));
+		if (array[i] == NULL) {
+			printf("Unable to allocate memory for row %d\n", i);
+			exit(1);
+		}
+	}
+
+	char ch;
+	int row_count = 0;
+	int col_count = 0;
+	while ((ch = fgetc(file)) != EOF) {
+		if (ch == '\n') {
+			array[row_count][col_count] = '\0';
+			row_count++;
+			col_count = 0;
+		} else {
+			array[row_count][col_count] = ch;
+			col_count++;
+		}
+	}
+	fclose(file);
+
+	return array;
+}
+
+void free_2d_array(char **array, int rows) {
+	for (int i = 0; i < rows; i++) {
+		free(array[i]);
+	}
+	free(array);
 }

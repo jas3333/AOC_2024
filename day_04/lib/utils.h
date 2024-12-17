@@ -39,4 +39,7 @@ void display_array(int *array, int size);
 bool safe_check(int *array, int count);
 int word_check(char grid[][141], int row_start, int col_start, int cols, int rows, int row_dir, int col_dir); 
 
+char **load_file_into_2d_array(char *filename); 
+void free_2d_array(char **array, int rows); 
+
 #endif
