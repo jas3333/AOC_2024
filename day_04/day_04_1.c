@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-
 	if (argc < 2) {
 		printf("Must provide filename arg.\n");
 		exit(1);
