@@ -198,8 +198,6 @@ int word_check(char grid[][141], int row_start, int col_start, int rows, int col
 	return 1;
 }
 
-
-// Need help with this one...
 char **load_file_into_2d_array(char *filename) {
 	int rows = file_row_count(filename); 
 	int cols = file_col_count(filename);
