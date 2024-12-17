@@ -23,9 +23,10 @@ typedef struct {
 
 MAP init_map(int size);
 int get_value(MAP *map, char *key);
-int line_count(const char *filename); 
+
+int file_row_count(const char *filename); 
+int file_col_count(char *filename); 
 int get_filesize(char *filename); 
-int get_line_length(char *filename); 
 
 uint32_t hash(char *key);
 

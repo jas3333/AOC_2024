@@ -7,8 +7,8 @@ int main(int argc, char *argv[]) {
 		printf("Must provide filename arg.\n");
 		exit(1);
 	}
-
 	char *filename = argv[1];
+
 	FILE *file = fopen(filename, "r");
 	if (file == NULL) {
 		printf("File not found.\n");
@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
 	char ch;
 	int row_count = 0;
 	int col_count = 0;
-	int rows = line_count(filename); 
-	int cols = get_line_length(filename);
+	int rows = file_row_count(filename); 
+	int cols = file_col_count(filename);
 	char buffer[rows][cols + 1];
 	while ((ch = fgetc(file)) != EOF) {
 		if (ch == '\n') {
@@ -31,7 +31,6 @@ int main(int argc, char *argv[]) {
 			buffer[row_count][col_count] = ch;
 			col_count++;
 		}
-
 	}
 	fclose(file);
 

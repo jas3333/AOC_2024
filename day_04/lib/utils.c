@@ -49,7 +49,7 @@ int get_value(MAP *map, char *key) {
 	return 0;
 }
 
-int line_count(const char *filename) {
+int file_row_count(const char *filename) {
 	int count = 0;
 	char ch;
 
@@ -161,7 +161,7 @@ int get_filesize(char *filename) {
 	return filesize;
 }
 
-int get_line_length(char *filename) {
+int file_col_count(char *filename) {
 	FILE *file = fopen(filename, "r");
 	if (file == NULL) {
 		printf("File not found.\n");
@@ -196,4 +196,11 @@ int word_check(char grid[][141], int row_start, int col_start, int rows, int col
 	}
 
 	return 1;
+}
+
+char **load_file_into_2d_array(char *filename) {
+	int rows = line_count(filename); 
+	int cols = 
+
+
 }
