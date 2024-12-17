@@ -1,93 +1,62 @@
-#include <stdio.h>
 #include "lib/utils.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
 
 	if (argc < 2) {
-		printf("Missing filename from args.\n");
+		printf("Must provide filename arg.\n");
 		exit(1);
-	} 
+	}
 
 	char *filename = argv[1];
-
-	int lines = line_count(filename);
-	int line_length = get_line_length(filename);
-	int total = 0;
-	int count = 0;
-	int line_count = 0;
-
-	char buffer[lines][line_length + 1];
 	FILE *file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("File not found.\n");
+		exit(1);
+	}
 
+	// Place contents from file into buffer without the '\n' char.
 	char ch;
+	int row_count = 0;
+	int col_count = 0;
+	int rows = line_count(filename); 
+	int cols = get_line_length(filename);
+	char buffer[rows][cols + 1];
 	while ((ch = fgetc(file)) != EOF) {
-		// Kick the \n to the curb!
 		if (ch == '\n') {
-			buffer[line_count][count] = '\0';
-			line_count++;
-			count = 0;
+			buffer[row_count][col_count] = '\0';
+			col_count = 0;
+			row_count++;
 		} else {
-			buffer[line_count][count] = ch;
-			count++;
+			buffer[row_count][col_count] = ch;
+			col_count++;
 		}
+
 	}
 	fclose(file);
 
-
-	for (int i = 0; i < lines; i++) {
-		for (int x = 0; x < line_length - 3; x++) {
-			if (buffer[i][x] == 'X' && buffer[i][x + 1] == 'M' && buffer[i][x + 2] == 'A' && buffer[i][x + 3] == 'S') {
-				total++;
-			}
-			if (buffer[i][x] == 'S' && buffer[i][x + 1] == 'A' && buffer[i][x + 2] == 'M' && buffer[i][x + 3] == 'X') {
-				total++;
-			}
-		}
-	}
-
-	// Check vertical
-	for (int i = 0; i < lines - 3; i++) {
-		for (int x = 0; x < line_length; x++) {
-			if (buffer[i][x] == 'X' && buffer[i + 1][x] == 'M' && buffer[i + 2][x] == 'A' && buffer[i + 3][x] == 'S') {
-				total++;
-			}
-			if (buffer[i][x] == 'S' && buffer[i + 1][x] == 'A' && buffer[i + 2][x] == 'M' && buffer[i + 3][x] == 'X') {
-				total++;
-			}
-		}
-	}
-
-	/*
-		x
-		 x
-		  x
-	*/
-	for (int i = 0; i < lines - 3; i++) {
-		for (int x = 0; x < line_length - 3; x++) {
-			if (buffer[i][x] == 'X' && buffer[i + 1][x + 1] == 'M' && buffer[i + 2][x + 2] == 'A' && buffer[i + 3][x + 3] == 'S') {
-				total++;
-			} 
-			if (buffer[i][x] == 'S' && buffer[i + 1][x + 1] == 'A' && buffer[i + 2][x + 2] == 'M' && buffer[i + 3][x + 3] == 'X') {
-				total++;
+	int directions[8][2] = {
+		{0, 1},			// Right;
+		{1, 0},			// Down;
+		{0, -1},		// Left;
+		{-1, 0},		// Up;
+		{1, 1},			// Down-Right
+		{-1, 1},		// Up-Right
+		{1, -1},		// Down-Left
+		{-1, -1},		// Up-Left
+	};
+	int total = 0;
+	for (int i = 0; i < rows; i++) {
+		for (int x = 0; x < cols; x++) {
+			if (buffer[i][x] == 'X') {
+				for (int d = 0; d < 8; d++) {
+					if (word_check(buffer, i, x, rows, cols, directions[d][0], directions[d][1])) {
+						total++;
+					}
+				}
 			}
 		}
 	}
-
-	/*
-		 x
-		x
-	   x
-	*/
-	for (int i = 0; i < lines - 3; i++) {
-		for (int x = 3; x - line_length;  x++) {
-			if (buffer[i][x] == 'X' && buffer[i + 1][x - 1] == 'M' && buffer[i + 2][x - 2] == 'A' && buffer[i + 3][x - 3] == 'S') {
-				total++;
-			}
-			if (buffer[i][x] == 'S' && buffer[i + 1][x - 1] == 'A' && buffer[i + 2][x - 2] == 'M' && buffer[i + 3][x - 3] == 'X') {
-				total++;
-			}
-		}
-	}
-
-	printf("%d\n", total);
+	printf("Total: %d\n", total);
 }

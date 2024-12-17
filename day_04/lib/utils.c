@@ -171,6 +171,29 @@ int get_line_length(char *filename) {
 	int count = 0;
 	char ch;
 	while ((ch = fgetc(file)) != '\n') count++; 
+	fclose(file);
 
 	return count;
+}
+
+int word_check(char grid[][141], int row_start, int col_start, int rows, int cols, int row_dir, int col_dir) {
+	char *word = "XMAS";
+	int row = row_start;
+	int col = col_start;
+
+	for (int i = 0; i < 4; i++) {
+		if (row < 0 || row >= rows || col < 0 || col >= cols) {
+			return 0;
+		}
+
+		if (grid[row][col] != word[i]) {
+			return 0;
+		}
+
+		row += row_dir;
+		col += col_dir;
+
+	}
+
+	return 1;
 }

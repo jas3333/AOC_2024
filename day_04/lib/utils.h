@@ -36,5 +36,6 @@ void fill_map(MAP *map, char *input_file);
 void display_array(int *array, int size);
 
 bool safe_check(int *array, int count);
+int word_check(char grid[][141], int row_start, int col_start, int cols, int rows, int row_dir, int col_dir); 
 
 #endif
