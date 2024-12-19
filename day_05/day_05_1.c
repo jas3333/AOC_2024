@@ -1,7 +1,7 @@
 #include "lib/utils.h"
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <stdbool.h>
 
 int main(int argc, char *argv[]) {
 	if (argc < 2) {
@@ -21,7 +21,31 @@ int main(int argc, char *argv[]) {
 	}
 	char buffer[128];
 	fast_forward(file, rule_size, 128);
+
+	int total = 0;
 	while (fgets(buffer, sizeof(buffer), file) != NULL) {
-		printf("%s", buffer);
+		int *numbers = NULL;
+		int count = 0;
+		char *token;
+		token = strtok(buffer, ",");
+		while (token != NULL) {
+			numbers = realloc(numbers, (count + 1) * sizeof(int));
+			if (numbers == NULL) {
+				printf("Unable to reallocate memory.\n");
+				exit(1);
+			}
+			numbers[count] = atoi(token);
+			token = strtok(NULL, ",");
+			count++;
+		}
+
+		if (is_update_in_order(numbers, rules, count, rule_size)) {
+			int middle_index = count / 2;
+			int middle_page = (count % 2 == 0) ? numbers[middle_index - 1] : numbers[middle_index];
+			total += middle_page;
+		}
+		free(numbers);
 	}
+
+	printf("Total: %d\n", total);
 }

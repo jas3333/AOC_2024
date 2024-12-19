@@ -268,7 +268,6 @@ int find_blank_line_number(char *filename) {
 	return 0;
 }
 
-
 // Loads rules into provided 2D array from input file.
 void load_rules(char *filename, int array[][2], int array_size) {
 	FILE *file = fopen(filename, "r");
@@ -285,6 +284,7 @@ void load_rules(char *filename, int array[][2], int array_size) {
 		token = strtok(buffer, "|");
 		while (token != NULL && count < 2) {
 			array[i][count] = atoi(token);
+			token = strtok(NULL, "|");
 			count++;
 		}
 	}
@@ -300,4 +300,28 @@ void fast_forward(FILE *file, int stop, int buffer_size) {
 			return;
 		}
 	}
+}
+
+bool is_update_in_order(int update[], int rules[][2], int u_size, int r_size) {
+	for (int i = 0; i < r_size; i++) {
+		int rule_one_index = -1;
+		int rule_two_index = -1;
+
+		for (int x = 0; x < u_size; x++) {
+			if (rules[i][0] == update[x]) {
+				rule_one_index = x;
+			} 
+			else if (rules[i][1] == update[x]) {
+				rule_two_index = x;
+			}
+		}
+
+		if (rule_one_index != -1 && rule_two_index != -1) {
+			if (rule_one_index >= rule_two_index) {
+				return false;
+			}
+		}
+	}
+
+	return true;
 }

@@ -45,5 +45,6 @@ void free_2d_array(char **array, int rows);
 int find_blank_line_number(char *filename);
 void load_rules(char *filename, int array[][2], int array_size); 
 void fast_forward(FILE *file, int stop, int buffer_size); 
+bool is_update_in_order(int update[], int rules[][2], int u_size, int r_size);
 
 #endif
