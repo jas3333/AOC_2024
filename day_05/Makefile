@@ -1,5 +1,5 @@
 CC = gcc
-SOURCE = day_05_1.c
+SOURCE = day_05_2.c
 OUTPUT = -o day_05
 LIB = lib/utils.h lib/utils.c
 

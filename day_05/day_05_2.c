@@ -1,14 +1,14 @@
-// Part 1
+// Part 2
 #include "lib/utils.h"
-#include <stdlib.h>
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
 	if (argc < 2) {
 		printf("Missing filename arg.\n");
 		exit(1);
 	}
+
 	char *filename = argv[1];
 
 	int rule_size = find_blank_line_number(filename);
@@ -20,21 +20,24 @@ int main(int argc, char *argv[]) {
 		printf("File: %s not found.\n", filename);
 		exit(1);
 	}
-	char buffer[128];
 	fast_forward(file, rule_size, 128);
 
+	char buffer[128];
 	int total = 0;
-	while (fgets(buffer, sizeof(buffer), file) != NULL) {
+	int fixed = 0;
+	while (fgets(buffer, 128, file) != NULL) {
 		int *numbers = NULL;
 		int count = 0;
+
 		char *token;
 		token = strtok(buffer, ",");
 		while (token != NULL) {
 			numbers = realloc(numbers, (count + 1) * sizeof(int));
 			if (numbers == NULL) {
-				printf("Unable to reallocate memory.\n");
+				printf("Unable to reallocate to numbers.\n");
 				exit(1);
 			}
+
 			numbers[count] = atoi(token);
 			token = strtok(NULL, ",");
 			count++;
@@ -44,9 +47,14 @@ int main(int argc, char *argv[]) {
 			int middle_index = count / 2;
 			int middle_page = (count % 2 == 0) ? numbers[middle_index - 1] : numbers[middle_index];
 			total += middle_page;
+		} else {
+			fix_update(numbers, rules, count, rule_size);
+			int middle_index = count / 2;
+			int middle_page = (count % 2 == 0) ? numbers[middle_index - 1] : numbers[middle_index];
+			fixed += middle_page;
 		}
 		free(numbers);
 	}
 
-	printf("Total: %d\n", total);
+	printf("Total: %d\n", fixed);
 }

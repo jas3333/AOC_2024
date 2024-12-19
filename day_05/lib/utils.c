@@ -325,3 +325,30 @@ bool is_update_in_order(int update[], int rules[][2], int u_size, int r_size) {
 
 	return true;
 }
+
+
+void fix_update(int update[], int rules[][2], int u_size, int r_size) {
+	for (int i = 0; i < r_size; i++) {
+		int rule_one_index = -1;
+		int rule_two_index = -1;
+
+		for (int x = 0; x < u_size; x++) {
+			if (rules[i][0] == update[x]) {
+				rule_one_index = x;
+			} 
+			else if (rules[i][1] == update[x]) {
+				rule_two_index = x;
+			}
+		}
+		if (rule_one_index != -1 && rule_two_index != -1) {
+			if (rule_one_index >= rule_two_index) {
+				int temp = update[rule_two_index];
+				update[rule_two_index] = update[rule_one_index];
+				update[rule_one_index] = temp;
+				fix_update(update, rules, u_size, r_size);
+			}
+		}
+	}
+
+	return;
+}
