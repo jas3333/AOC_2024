@@ -19,13 +19,17 @@ int main(int argc, char *argv[]) {
     char guard = '^';
 
     // Find guard's initial position
+    int found = 0;
     for (int y = 0; y < rows; y++) {
         for (int x = 0; x < cols; x++) {
             if (lab[y][x] == '^') {
                 guard_y = y;
                 guard_x = x;
+                found = 1;
+                break;
             }
         }
+        if (found) break;
     }
 
     int steps = 0;
@@ -61,7 +65,6 @@ int main(int argc, char *argv[]) {
                 guard_x--;
             } 
         }
-
     }
 
     for (int y = 0; y < rows; y++) {
@@ -72,5 +75,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    free_2d_array(lab, rows);
+
     printf("%d\n", steps);
+    
 }
