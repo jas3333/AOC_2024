@@ -46,6 +46,25 @@ array *create_array(int size) {
     return new_array;
 }
 
+void add_obstructions(array *array, int y, int x, char dir) {
+    if (array->index == array->size) {
+        int new_size = array->size * 2;
+        OBSTRUCTIONS *temp = realloc(array->obs, sizeof(OBSTRUCTIONS) * new_size);
+        if (temp == NULL) {
+            printf("Unable to reallocate memory.\n");
+            free(array->obs);
+            exit(1);
+        }
+        array->obs = temp;
+        array->size = new_size;
+    }
+
+    array->obs[array->index].y = y;
+    array->obs[array->index].x = x;
+    array->obs[array->index].dir = dir;
+    array->index++;
+}
+
 void destroy_array(array *array) {
     free(array->obs);
     free(array);
@@ -192,6 +211,7 @@ void clear_array(array *array) {
     }
 }
 
+
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         printf("Missing filename args.\n");
@@ -201,7 +221,7 @@ int main(int argc, char *argv[]) {
     char *filename = argv[1];
     LAB *lab = setup_lab(filename);
     GUARD *guard = setup_guard(lab);
-    array *obstructions = create_array(500);
+    array *obstructions = create_array(10);
     clear_array(obstructions);
 
     int loops = 0;
@@ -226,11 +246,8 @@ int main(int argc, char *argv[]) {
                                 loops++;
                                 break;
                             } 
-                            obstructions->obs[obstructions->index].y = guard->y;
-                            obstructions->obs[obstructions->index].x = guard->x;
-                            obstructions->obs[obstructions->index].dir = guard->ch; 
+                            add_obstructions(obstructions, guard->y, guard->x, guard->ch);
                             guard->ch = '>';
-                            obstructions->index++;
                         } else {
                             guard->y--;
                         }
@@ -241,11 +258,8 @@ int main(int argc, char *argv[]) {
                                 loops++;
                                 break;
                             } 
-                            obstructions->obs[obstructions->index].y = guard->y;
-                            obstructions->obs[obstructions->index].x = guard->x;
-                            obstructions->obs[obstructions->index].dir = guard->ch; 
+                            add_obstructions(obstructions, guard->y, guard->x, guard->ch);
                             guard->ch = 'v';
-                            obstructions->index++;
                         } else {
                             guard->x++;
                         }
@@ -256,11 +270,8 @@ int main(int argc, char *argv[]) {
                                 loops++;
                                 break;
                             } 
-                            obstructions->obs[obstructions->index].y = guard->y;
-                            obstructions->obs[obstructions->index].x = guard->x;
-                            obstructions->obs[obstructions->index].dir = guard->ch; 
+                            add_obstructions(obstructions, guard->y, guard->x, guard->ch);
                             guard->ch = '<';
-                            obstructions->index++;
                         } else {
                             guard->y++;
                         }
@@ -271,11 +282,8 @@ int main(int argc, char *argv[]) {
                                 loops++;
                                 break;
                             } 
-                            obstructions->obs[obstructions->index].y = guard->y;
-                            obstructions->obs[obstructions->index].x = guard->x;
-                            obstructions->obs[obstructions->index].dir = guard->ch; 
+                            add_obstructions(obstructions, guard->y, guard->x, guard->ch);
                             guard->ch = '^';
-                            obstructions->index++;
                         } else {
                             guard->x--;
                         }
