@@ -12,6 +12,33 @@
 #define BASIS_32 2166136261
 
 typedef struct {
+    int y;
+    int x;
+} STEPS;
+
+typedef struct {
+    STEPS *steps;       // Array to track steps taken
+    int size;           // Size of array to track steps.
+	char ch;
+    int index;
+    int y;
+    int x;
+} GUARD;
+
+typedef struct {
+    char *floor;
+} LAB_FLOOR;
+
+typedef struct {
+    LAB_FLOOR *layout;
+    GUARD guard;
+	int obs_y;			// Track position of temp obstruction	
+	int obs_x;			// Track position of temp obstruction
+    int rows;
+    int cols;
+} LAB;
+
+typedef struct {
 	char *key;
 	int value;
 } ENTRIES;
@@ -47,5 +74,11 @@ void load_rules(char *filename, int array[][2], int array_size);
 void fast_forward(FILE *file, int stop, int buffer_size); 
 bool is_update_in_order(int update[], int rules[][2], int u_size, int r_size);
 void fix_update(int update[], int rules[][2], int u_size, int r_size); 
+
+
+LAB *setup_lab(char *filename);
+void populate_lab(LAB *lab, char *filename); 
+void locate_guard(LAB *lab); 
+void cleanup_lab(LAB *lab); 
 
 #endif

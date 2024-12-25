@@ -352,3 +352,92 @@ void fix_update(int update[], int rules[][2], int u_size, int r_size) {
 
 	return;
 }
+
+LAB *setup_lab(char *filename) {
+
+    LAB *new_lab = malloc(sizeof(LAB));
+    if (new_lab == NULL) {
+        fprintf(stderr, "Failed to allocate memory for lab.\n");
+        exit(1);
+    }
+    new_lab->guard.size = 20;
+    new_lab->guard.index = 0;
+	new_lab->obs_y = 0;
+	new_lab->obs_x = 0;
+	new_lab->guard.ch = '^';
+    new_lab->guard.steps = malloc(sizeof(STEPS) * new_lab->guard.size);
+    if (new_lab->guard.steps == NULL) {
+        fprintf(stderr, "Failed to allocate memory for guard.\n");
+        exit(1);
+    }
+    new_lab->guard.y = 0;
+    new_lab->guard.x = 0;
+
+    new_lab->rows = file_row_count(filename);   // Returns row count of file
+    new_lab->cols = file_col_count(filename);   // Returns col count of file
+
+    new_lab->layout = malloc(sizeof(LAB_FLOOR) * new_lab->rows);
+
+    for (int i = 0; i < new_lab->rows; i++) {
+        new_lab->layout[i].floor = malloc(sizeof(char) * new_lab->cols);
+        if (new_lab->layout->floor == NULL) {
+            printf("Unable to setup lab, there was a memory issue...\n");
+            exit(1);
+        }
+    }
+
+    return new_lab;
+}
+
+void populate_lab(LAB *lab, char *filename) {
+
+	int rows = file_row_count(filename); 
+	int cols = file_col_count(filename);
+
+	FILE *file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("Unable to find %s.\n", filename);
+		exit(1);
+	}
+	char ch;
+	int row_count = 0;
+	int col_count = 0;
+	while ((ch = fgetc(file)) != EOF) {
+		if (ch == '\n') {
+			lab->layout[row_count].floor[col_count] = '\0';
+			row_count++;
+			col_count = 0;
+		} else {
+			lab->layout[row_count].floor[col_count] = ch;
+			col_count++;
+		}
+	}
+
+	locate_guard(lab);
+	fclose(file);
+}
+
+
+void locate_guard(LAB *lab) {
+    int found = 0;
+    for (int y = 0; y < lab->rows; y++) {
+        for (int x = 0; x < lab->cols; x++) {
+            if (lab->layout[y].floor[x] == lab->guard.ch) {
+                lab->guard.y = y;
+                lab->guard.x = x;
+                found = 1;
+                break;
+            }
+        }
+        if (found) break;
+    }
+}
+
+void cleanup_lab(LAB *lab) {
+	for (int i = 0; i < lab->rows; i++) {
+		free(lab->layout[i].floor);
+	}
+	free(lab->layout);
+	free(lab->guard.steps);
+	free(lab);
+}
